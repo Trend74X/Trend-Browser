@@ -20,13 +20,15 @@ class AppController extends GetxController {
   getBookMarks() {
     try {
       isLoading(true);
-      if(read('firstTime') == null|| read('firstTime') == '') {
-        write('firstTime', false);
-        bookmarks = localData['homeList']!;
-        write('localData', bookmarks);
-      } else {
-        var data = read('localData');
-        bookmarks = data;
+      var data = read('localData');
+      bookmarks = localData['homeList']!;
+      if(data != "") {
+        for(Map<String, dynamic> item in data) {
+          Map<String, String> dataMap = Map<String, String>.from(item.map(
+            (key, value) => MapEntry<String, String>(key, value.toString()),
+          ));
+          bookmarks.add(dataMap);
+        }
       }
     } catch (e) {
       log(e.toString());
@@ -38,12 +40,19 @@ class AppController extends GetxController {
   addBookMark(name, site) {
     try {
       isLoading(true);
-      bookmarks.add({
+      var data = {
         "name": name.toString(),
         "url": site.toString(),
         "img": ""
-      });
-      write('localData', bookmarks);
+      };
+      bookmarks.add(data);
+      var localData = read('localData');
+      if(localData == ""){
+        write('localData', [data]);
+      } else {
+        localData.add(data);
+        write('localData', localData);
+      }
     } catch (e) {
       log(e.toString());
     } finally {

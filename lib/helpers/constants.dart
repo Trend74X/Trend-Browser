@@ -18,7 +18,7 @@ var localData = {
     {
       "name": "Twitter",
       "url": "https://www.twitter.com",
-      "img": "https://cdn-icons-png.flaticon.com/128/3670/3670211.png"
+      "img": "https://cdn-icons-png.flaticon.com/128/5969/5969020.png"
     },
     {
       "name": "Google",
@@ -39,11 +39,6 @@ var localData = {
       "name": "TikTok",
       "url": "https://www.tiktok.com/explore",
       "img": "https://cdn-icons-png.flaticon.com/128/4782/4782345.png"
-    },
-    {
-      "name": "Smule",
-      "url": "https://www.smule.com",
-      "img": "https://cdn-icons-png.flaticon.com/128/7324/7324455.png"
     },
     {
       "name": "Vimeo",

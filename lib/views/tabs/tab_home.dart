@@ -19,6 +19,7 @@ class TabHomeState extends State<TabHome> {
   final AppController _con = Get.put(AppController());
   final siteNameCon = TextEditingController();
   final siteUrlCon = TextEditingController();
+  bool removeBookmark = false;
 
   @override
   void initState() {
@@ -28,74 +29,69 @@ class TabHomeState extends State<TabHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black87,
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 48.0),
-        child:  Obx(() =>
-          _con.isLoading.value == true
-            ? const Center(
-              child: CircularProgressIndicator(),
-            )
-            : GridView.count(
-              crossAxisCount: 3,
-              children: List.generate(
-                _con.bookmarks.length + 1, 
-                (index) {
-                  if(index < _con.bookmarks.length) {
-                    var data = _con.bookmarks[index];
-                    return InkWell(
-                      onTap: () {
-                        write('storedUrl', data['url']);
-                        setState(() {
-                          _con.urlCon.text = data['url'];
-                          _con.selected("view");
-                        });
-                      },
-                      child: Stack(
-                        children: [
-                          Column(
-                            children: [
-                              DisplayNetworkImage(
-                                imageUrl: data['img']!,
-                                height: 100.0,
-                                width: 100.0,
-                              ),
-                              Text(data['name']!),
-                            ],
-                          ),
-                          Positioned(
-                            top: 0.0,
-                            right: 0.0,
-                            child: IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                // Handle close button press here
-                              },
+    return GestureDetector(
+      onTap: () => setState(() => removeBookmark = false ),
+      child: Scaffold(
+        backgroundColor: Colors.black87,
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 48.0),
+          child:  Obx(() =>
+            _con.isLoading.value == true
+              ? const Center(
+                child: CircularProgressIndicator(),
+              )
+              : GridView.count(
+                crossAxisCount: 3,
+                children: List.generate(
+                  _con.bookmarks.length + 1, 
+                  (index) {
+                    if(index < _con.bookmarks.length) {
+                      var data = _con.bookmarks[index];
+                      return InkWell(
+                        onTap: () {
+                          write('storedUrl', data['url']);
+                          setState(() {
+                            _con.urlCon.text = data['url'];
+                            _con.selected("view");
+                          });
+                        },
+                        onLongPress: () => setState(() => removeBookmark = true),
+                        child: Stack(
+                          children: [
+                            Column(
+                              children: [
+                                DisplayNetworkImage(
+                                  imageUrl: data['img']!,
+                                  height: 100.0,
+                                  width: 100.0,
+                                ),
+                                Text(data['name']!),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return InkWell(
-                      onTap: () => showAddBookmark(),
-                      child: Column(
-                        children: const [
-                          Icon(
-                            Icons.add,
-                            size: 100.0,
-                          ),
-                          Text('Add New'),
-                        ],
-                      ),
-                    );
+                            showDeleteIcon(index)
+                          ],
+                        ),
+                      );
+                    } else {
+                      return InkWell(
+                        onTap: () => showAddBookmark(),
+                        child: Column(
+                          children: const [
+                            Icon(
+                              Icons.add,
+                              size: 100.0,
+                            ),
+                            Text('Add New'),
+                          ],
+                        ),
+                      );
+                    }
                   }
-                }
-              ) 
-            ),
+                ) 
+              ),
+          )
         )
-      )
+      ),
     );
   }
 
@@ -123,6 +119,36 @@ class TabHomeState extends State<TabHome> {
           )
         ],
       )
+    );
+  }
+
+  showDeleteIcon(index) {
+    return Visibility(
+      visible: removeBookmark,
+      child: Positioned(
+        top: 0.0,
+        right: 0.0,
+        child: Container(
+          height: 25.0,
+          width: 25.0,
+          decoration: const BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.all(Radius.circular(25.0))
+          ),
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            color: Colors.white,
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              setState(() {
+                _con.bookmarks.removeAt(index);
+                removeBookmark = false;
+              });
+              write('localData', _con.bookmarks);
+            },
+          )
+        )
+      ),
     );
   }
 
