@@ -20,30 +20,27 @@ class _HomePageState extends State<HomePage> {
   
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            title: Obx(() => 
-              _con.selected.value == 'history'
-                ? const Text('History')
-                : urlField()
-            )
-          ),
-          body: Obx(() =>
-            _con.selected.value == ""
-              ? const TabHome()
-              : _con.selected.value == "history"
-                ? const History()
-                : const WebsiteView()
-          ),
-          bottomSheet: bottomContainer(),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Obx(() => 
+            _con.selected.value == 'history'
+              ? const Text('History')
+              : urlField()
+          )
         ),
+        body: Obx(() =>
+          _con.selected.value == ""
+            ? const TabHome()
+            : _con.selected.value == "history"
+              ? const History()
+              : const WebsiteView()
+        ),
+        bottomSheet: bottomContainer(),
       ),
     );
   }
@@ -56,11 +53,13 @@ class _HomePageState extends State<HomePage> {
         child: TextFormField(
           controller: _con.urlCon,
           keyboardType: TextInputType.url,
+          textInputAction: TextInputAction.done,
           decoration: InputDecoration(
             hintText: 'Enter URL',
             filled: true,
             fillColor: Colors.white,        
             border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             suffixIcon: _con.selected.value == 'view'
               ? IconButton(
                   onPressed: () => _con.webViewController!.reload(),
@@ -72,8 +71,12 @@ class _HomePageState extends State<HomePage> {
               : null,
           ),
           onFieldSubmitted: (value) {
-            if(_con.isURL('value')) {
-              _con.urlCon.text = value;
+            if(_con.isURL(value)) {
+              if(!value.contains('http') || !value.contains('https')) {
+                _con.urlCon.text = 'https://$value';
+              } else {
+                _con.urlCon.text = value;
+              }
             } else {
               _con.urlCon.text = "https://www.google.com/search?q=$value";
             }
@@ -83,7 +86,7 @@ class _HomePageState extends State<HomePage> {
             } else {
               _con.webViewController!.loadUrl(urlRequest: URLRequest(url: Uri.parse(_con.urlCon.text)));
             }
-          },
+          }
         ),
       )
     );

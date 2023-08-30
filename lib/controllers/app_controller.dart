@@ -27,7 +27,10 @@ class AppController extends GetxController {
           Map<String, String> dataMap = Map<String, String>.from(item.map(
             (key, value) => MapEntry<String, String>(key, value.toString()),
           ));
-          bookmarks.add(dataMap);
+          bool bookmarkExists = bookmarks.any((data) => data['name'] == dataMap["name"]);
+          if(!bookmarkExists) {
+            bookmarks.add(dataMap);
+          }
         }
       }
     } catch (e) {
@@ -61,8 +64,10 @@ class AppController extends GetxController {
   }
 
   bool isURL(String string) {
-    Uri? uri = Uri.tryParse(string);
-    return uri != null && uri.hasScheme && uri.hasAuthority;
+    RegExp urlPattern = RegExp(
+      r'^(https?://)?(www\.)?([a-zA-Z0-9\-]+)\.([a-zA-Z]{2,})(/[^\s]*)?$',
+    );
+    return urlPattern.hasMatch(string);
   }
 
   createHistory(String icon, name, url) {
