@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _con.getHistoryList();
+    _con.getDownloadList();
     Timer(
       const Duration(seconds: 1),
       () => Navigator.push(

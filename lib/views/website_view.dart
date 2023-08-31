@@ -28,6 +28,7 @@ class _WebsiteViewState extends State<WebsiteView> {
       supportZoom: false,
       transparentBackground: true,
       javaScriptEnabled: true,
+      useOnDownloadStart: true,
       userAgent: 'Mozilla/5.0 Mobile',
     ),
     android: AndroidInAppWebViewOptions(
@@ -150,6 +151,9 @@ class _WebsiteViewState extends State<WebsiteView> {
                         onLoadResource: (controller, resource) {
                           final url = resource.url;
                           log(url.toString());
+                        },
+                        onDownloadStartRequest: (controller, url) async {
+                          _con.fileDownloadPermission(url);
                         },
 
                         // onEnterFullscreen: (controller) {

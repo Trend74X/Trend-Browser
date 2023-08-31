@@ -18,54 +18,57 @@ class _HistoryState extends State<History> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black87,
-      height: MediaQuery.of(context).size.height - kToolbarHeight - 80,
-      width: MediaQuery.of(context).size.width,
-      child: _con.history.isEmpty
-        ? const Center(
-          child: Text('No recent history')
-        )
-        : SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    _con.history.clear();
-                    remove('history');
-                  });
-                },
-                child: const SizedBox(
-                  height: 35.0,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Clear browsing data...',
-                      style: TextStyle(
-                        color: Colors.red
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Container(
+        color: Colors.black87,
+        height: MediaQuery.of(context).size.height - kToolbarHeight - kBottomNavigationBarHeight - MediaQuery.of(context).padding.top,
+        width: MediaQuery.of(context).size.width,
+        child: _con.history.isEmpty
+          ? const Center(
+            child: Text('No recent history')
+          )
+          : SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _con.history.clear();
+                      remove('history');
+                    });
+                  },
+                  child: const SizedBox(
+                    height: 35.0,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Clear browsing data...',
+                        style: TextStyle(
+                          color: Colors.red
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
+                    )
+                  ),
                 ),
-              ),
-              const Divider(color: Colors.white),
-              ListView.separated(
-                itemCount: _con.history.length,
-                shrinkWrap:true,
-                separatorBuilder: (context, index) => const Divider(color: Colors.white),
-                physics: const BouncingScrollPhysics(),
-                reverse: true,
-                itemBuilder: (context, index) {
-                  return historyListTile(_con.history[index], index);
-                }
-              ),
-              const Divider(color: Colors.white)
-            ],
+                const Divider(color: Colors.white),
+                ListView.separated(
+                  itemCount: _con.history.length,
+                  shrinkWrap:true,
+                  separatorBuilder: (context, index) => const Divider(color: Colors.white),
+                  physics: const BouncingScrollPhysics(),
+                  reverse: true,
+                  itemBuilder: (context, index) {
+                    return historyListTile(_con.history[index], index);
+                  }
+                ),
+                const Divider(color: Colors.white)
+              ],
+            ),
           ),
-        ),
+      ),
     );
   }
 

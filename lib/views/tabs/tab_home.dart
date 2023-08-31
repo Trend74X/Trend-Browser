@@ -29,68 +29,86 @@ class TabHomeState extends State<TabHome> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => setState(() => removeBookmark = false ),
-      child: Scaffold(
-        backgroundColor: Colors.black87,
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 48.0),
-          child:  Obx(() =>
-            _con.isLoading.value == true
-              ? const Center(
-                child: CircularProgressIndicator(),
-              )
-              : GridView.count(
-                crossAxisCount: 3,
-                children: List.generate(
-                  _con.bookmarks.length + 1, 
-                  (index) {
-                    if(index < _con.bookmarks.length) {
-                      var data = _con.bookmarks[index];
-                      return InkWell(
-                        onTap: () {
-                          write('storedUrl', data['url']);
-                          setState(() {
-                            _con.urlCon.text = data['url'];
-                            _con.selected("view");
-                          });
-                        },
-                        onLongPress: () => setState(() => removeBookmark = true),
-                        child: Stack(
-                          children: [
-                            Column(
-                              children: [
-                                DisplayNetworkImage(
-                                  imageUrl: data['img']!,
-                                  height: 100.0,
-                                  width: 100.0,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: GestureDetector(
+        onTap: () => setState(() => removeBookmark = false ),
+        child: Scaffold(
+          backgroundColor: Colors.black87,
+          body: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child:  Obx(() =>
+              _con.isLoading.value == true
+                ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+                : GridView.count(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 16.0,
+                  children: List.generate(
+                    _con.bookmarks.length + 1, 
+                    (index) {
+                      if(index < _con.bookmarks.length) {
+                        var data = _con.bookmarks[index];
+                        return InkWell(
+                          onTap: () {
+                            write('storedUrl', data['url']);
+                            setState(() {
+                              _con.urlCon.text = data['url'];
+                              _con.selected("view");
+                            });
+                          },
+                          onLongPress: () => setState(() => removeBookmark = true),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                children: [
+                                  DisplayNetworkImage(
+                                    imageUrl: data['img']!,
+                                    height: 100.0,
+                                    width: 100.0,
+                                  ),
+                                  showDeleteIcon(index)
+                                ],
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                data['name']!,
+                                style: const TextStyle(
+                                  fontSize: 16.0
                                 ),
-                                Text(data['name']!),
-                              ],
-                            ),
-                            showDeleteIcon(index)
-                          ],
-                        ),
-                      );
-                    } else {
-                      return InkWell(
-                        onTap: () => showAddBookmark(),
-                        child: Column(
-                          children: const [
-                            Icon(
-                              Icons.add,
-                              size: 100.0,
-                            ),
-                            Text('Add New'),
-                          ],
-                        ),
-                      );
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return InkWell(
+                          onTap: () => showAddBookmark(),
+                          child: Column(
+                            children: const [
+                              Icon(
+                                Icons.add,
+                                size: 100.0,
+                              ),
+                              SizedBox(height: 8.0),
+                              Text(
+                                'Add New',
+                                style: TextStyle(
+                                  fontSize: 16.0
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
-                  }
-                ) 
-              ),
+                  ) 
+                ),
+            )
           )
-        )
+        ),
       ),
     );
   }

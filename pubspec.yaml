@@ -54,6 +54,8 @@ dev_dependencies:
   cached_network_image: ^3.2.3
   shimmer: ^3.0.0
   flutter_svg: ^2.0.5
+  flutter_file_downloader: ^1.1.2
+  mimecon: ^0.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

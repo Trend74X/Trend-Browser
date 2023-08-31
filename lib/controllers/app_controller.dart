@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:trend_browser/helpers/constants.dart';
 import 'package:trend_browser/helpers/read_write.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:trend_browser/models/download_model.dart';
 import 'package:trend_browser/models/history_item_model.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:trend_browser/widgets/show_message.dart';
 
 class AppController extends GetxController {
   InAppWebViewController? webViewController;
@@ -16,6 +19,7 @@ class AppController extends GetxController {
   RxString selected = "".obs;
   RxBool hideBottomSheet = false.obs;
   RxList history = [].obs;
+  RxList downloadList = [].obs;
 
   getBookMarks() {
     try {
@@ -88,10 +92,96 @@ class AppController extends GetxController {
     }
   }
 
-  bool isDownloadableLink(Uri url) {
-    final List<String> validExtensions = ['.pdf', '.zip', '.jpg', '.png', '.doc'];
-    final String linkExtension = url.path.split('.').last.toLowerCase();
-    return validExtensions.contains(linkExtension);
+  fileDownloadPermission(url) {
+    return Get.dialog(
+      AlertDialog(
+        content: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+          child: Text(
+            'You are about to download ${url.suggestedFilename}. \n Are you sure?',
+            textAlign: TextAlign.center
+          ),
+        ),
+        contentPadding: const EdgeInsets.only(top: 8.0),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.grey
+            ),
+            onPressed: () => Get.back(),
+            child: const Text('Cancel')
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red
+            ),
+            onPressed: () {
+              Get.back();
+              downloadFile(url);
+            }, 
+            child: const Text('Download')
+          )
+        ],
+      ),
+    );
+  }
+
+  downloadFile(url) async {
+    await createDownloadLog(url);
+    FileDownloader.downloadFile(
+      url: url.url.toString(),
+      name: url.suggestedFilename,
+      onProgress: (String? fileName, double progress) {
+        log('$fileName => $progress%');
+      },
+      onDownloadCompleted: (String path) {
+        downloadCompleteShow(url);
+      },
+      onDownloadError: (String error) {
+        downloadError(error, url);
+      }
+    );
+  }
+
+  createDownloadLog(url) {
+    var downloadItem = DownloadModel(name: url.suggestedFilename, progress: 0.0, url: url.url.toString(), mimeType: url.mimeType, status: null, fileSize: url.contentLength);
+    downloadList.add(downloadItem);
+    List downloadJsonList = downloadList.map((item) => item.toJson()).toList();
+    write('downloadList', downloadJsonList);
+  }
+
+  downloadCompleteShow(url) async {
+    showMessage('Download Completed.');
+    var lastIndex = downloadList.lastIndexWhere((element) => element.name == url.suggestedFilename);
+    downloadList[lastIndex].status = "Completed";
+    List downloadJsonList = downloadList.map((item) => item.toJson()).toList();
+    write('downloadList', downloadJsonList);
+  }
+
+  downloadError(error, url) {
+    showMessage(error);
+    var lastIndex = downloadList.lastIndexWhere((element) => element.name == url.suggestedFilename);
+    downloadList[lastIndex].status = "Failed";
+    List downloadJsonList = downloadList.map((item) => item.toJson()).toList();
+    write('downloadList', downloadJsonList);
+  }
+
+  getDownloadList() {
+    try {
+      isLoading(true);
+      var data = read('downloadList');
+      if(data != "") {
+        downloadList.clear();
+        for(var item in data) {
+          downloadList.add(DownloadModel.fromJson(item));
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      isLoading(false);
+    }
   }
 
 }
