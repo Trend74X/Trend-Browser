@@ -160,7 +160,6 @@ class TabHomeState extends State<TabHome> {
             onPressed: () {
               setState(() {
                 _con.bookmarks.removeAt(index);
-                removeBookmark = false;
               });
               write('localData', _con.bookmarks);
             },

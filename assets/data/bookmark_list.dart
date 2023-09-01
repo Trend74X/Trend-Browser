@@ -1,5 +1,5 @@
 var localData = {
-  "homeList": [
+  "bookmark_list": [
     {
       "name": "Youtube",
       "url": "https://www.youtube.com",

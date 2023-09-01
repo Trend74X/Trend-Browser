@@ -2,7 +2,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:trend_browser/helpers/constants.dart';
 import 'package:trend_browser/helpers/read_write.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:trend_browser/models/download_model.dart';
