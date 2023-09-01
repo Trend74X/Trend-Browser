@@ -153,7 +153,9 @@ class _WebsiteViewState extends State<WebsiteView> {
                           log(url.toString());
                         },
                         onDownloadStartRequest: (controller, url) async {
-                          _con.fileDownloadPermission(url);
+                          if(_con.selected.value == "view") {
+                            _con.fileDownloadPermission(url);
+                          }
                         },
 
                         // onEnterFullscreen: (controller) {
