@@ -36,7 +36,7 @@ class TabHomeState extends State<TabHome> {
         child: Scaffold(
           backgroundColor: Colors.black87,
           body: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 58.0),
             child:  Obx(() =>
               _con.isLoading.value == true
                 ? const Center(
@@ -77,8 +77,10 @@ class TabHomeState extends State<TabHome> {
                               Text(
                                 data['name']!,
                                 style: const TextStyle(
-                                  fontSize: 16.0
+                                  fontSize: 16.0,
                                 ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1
                               ),
                             ],
                           ),
@@ -119,19 +121,19 @@ class TabHomeState extends State<TabHome> {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          customTextField(siteNameCon, TextInputType.name ),
+          customTextField(siteNameCon, 'Site Name', TextInputType.name ),
           const SizedBox(height: 8.0),
-          customTextField(siteUrlCon, TextInputType.url ),
+          customTextField(siteUrlCon, 'Site Url', TextInputType.url ),
           const SizedBox(height: 8.0),
           customButton(
             'Add',
             () async {
               if(siteNameCon.text != '' && siteUrlCon.text != '') {
-                Get.back();
                 await _con.addBookMark(siteNameCon.text, siteUrlCon.text);
                 siteNameCon.clear();
                 siteUrlCon.clear();
                 setState(() { });
+                Get.back();
               }
             }
           )

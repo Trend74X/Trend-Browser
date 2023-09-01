@@ -22,6 +22,7 @@ class _DownloadPageState extends State<DownloadPage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Container(
+        padding: const EdgeInsets.only(bottom: 42.0),
         color: Colors.black87,
         height: MediaQuery.of(context).size.height - kToolbarHeight - kBottomNavigationBarHeight - MediaQuery.of(context).padding.top,
         width: MediaQuery.of(context).size.width,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-customTextField(con, keyboardType) {
+customTextField(con, labelName, keyboardType) {
   return TextFormField(
     controller: con,
     keyboardType: keyboardType,
     decoration: InputDecoration(
-      labelText: 'Site Name',
+      labelText: labelName,
       labelStyle: const TextStyle(
         color: Colors.black
       ),
