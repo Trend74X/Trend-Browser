@@ -2,6 +2,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trend_browser/helpers/bookmark_list.dart';
 import 'package:trend_browser/helpers/read_write.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:trend_browser/models/download_model.dart';
@@ -24,7 +25,7 @@ class AppController extends GetxController {
     try {
       isLoading(true);
       var data = read('localData');
-      bookmarks = localData['homeList']!;
+      bookmarks = localData['bookmark_list']!;
       if(data != "") {
         for(Map<String, dynamic> item in data) {
           Map<String, String> dataMap = Map<String, String>.from(item.map(

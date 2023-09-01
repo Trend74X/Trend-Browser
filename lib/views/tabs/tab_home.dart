@@ -119,19 +119,19 @@ class TabHomeState extends State<TabHome> {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          customTextField(siteNameCon),
+          customTextField(siteNameCon, TextInputType.name ),
           const SizedBox(height: 8.0),
-          customTextField(siteUrlCon),
+          customTextField(siteUrlCon, TextInputType.url ),
           const SizedBox(height: 8.0),
           customButton(
             'Add',
             () async {
               if(siteNameCon.text != '' && siteUrlCon.text != '') {
+                Get.back();
                 await _con.addBookMark(siteNameCon.text, siteUrlCon.text);
                 siteNameCon.clear();
                 siteUrlCon.clear();
                 setState(() { });
-                Get.back();
               }
             }
           )
@@ -142,7 +142,7 @@ class TabHomeState extends State<TabHome> {
 
   showDeleteIcon(index) {
     return Visibility(
-      visible: removeBookmark,
+      visible: removeBookmark && index > 8,
       child: Positioned(
         top: 0.0,
         right: 0.0,
