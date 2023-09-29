@@ -29,7 +29,7 @@ class _WebsiteViewState extends State<WebsiteView> {
       transparentBackground: true,
       javaScriptEnabled: true,
       useOnDownloadStart: true,
-      userAgent: 'Mozilla/5.0 Mobile',
+      userAgent: 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.181 Mobile Safari/537.36',
     ),
     android: AndroidInAppWebViewOptions(
       useHybridComposition: true,
