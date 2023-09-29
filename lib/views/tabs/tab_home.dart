@@ -67,7 +67,7 @@ class TabHomeState extends State<TabHome> {
                                 children: [
                                   DisplayNetworkImage(
                                     imageUrl: data['img']!,
-                                    height: 100.0,
+                                    height: 90.0,
                                     width: 100.0,
                                   ),
                                   showDeleteIcon(index)
@@ -92,7 +92,7 @@ class TabHomeState extends State<TabHome> {
                             children: const [
                               Icon(
                                 Icons.add,
-                                size: 100.0,
+                                size: 90.0,
                               ),
                               SizedBox(height: 8.0),
                               Text(

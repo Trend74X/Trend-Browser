@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'dart:io';
 import 'dart:developer';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -157,20 +158,19 @@ class _WebsiteViewState extends State<WebsiteView> {
                             _con.fileDownloadPermission(url);
                           }
                         },
-
-                        // onEnterFullscreen: (controller) {
-                        //   SystemChrome.setPreferredOrientations([
-                        //     DeviceOrientation.landscapeLeft,
-                        //   ]);
-                        //   // AutoOrientation.landscapeRightMode();
-                        // },
-                        // onExitFullscreen: (controller) {
-                        //   setState(() {
-                        //     SystemChrome.setPreferredOrientations(
-                        //       [DeviceOrientation.portraitUp],
-                        //     );
-                        //   });
-                        // },
+                        onEnterFullscreen: (controller) {
+                          SystemChrome.setPreferredOrientations([
+                            DeviceOrientation.landscapeLeft,
+                            DeviceOrientation.landscapeRight
+                          ]);
+                        },
+                        onExitFullscreen: (controller) {
+                          setState(() {
+                            SystemChrome.setPreferredOrientations(
+                              [DeviceOrientation.portraitUp],
+                            );
+                          });
+                        },
                       ),
                       progress < 1.0
                         ? LinearProgressIndicator(value: progress, color: Colors.red)
