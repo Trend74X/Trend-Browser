@@ -1,10 +1,10 @@
 // ignore_for_file: unused_import, depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mimecon/mimecon.dart';
 import 'package:trend_browser/controllers/app_controller.dart';
 import 'package:trend_browser/helpers/read_write.dart';
 import 'package:trend_browser/widgets/display_image.dart';
-import 'package:mimecon/mimecon.dart';
 
 class DownloadPage extends StatefulWidget {
   const DownloadPage({super.key});
@@ -19,8 +19,8 @@ class _DownloadPageState extends State<DownloadPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Container(
         padding: const EdgeInsets.only(bottom: 42.0),
         color: Colors.black87,

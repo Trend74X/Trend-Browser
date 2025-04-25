@@ -1,7 +1,7 @@
 # Trend Browser App
 
-![Flutter](https://img.shields.io/badge/Flutter-3.7.7-blue)
-![Dart](https://img.shields.io/badge/Dart-2.19.4-blue)
+![Flutter](https://img.shields.io/badge/Flutter-3.27.3-blue)
+![Dart](https://img.shields.io/badge/Dart-3.6.1-blue)
 ![State Management](https://img.shields.io/badge/State%20Management-Getx-green)
 
 ## Overview

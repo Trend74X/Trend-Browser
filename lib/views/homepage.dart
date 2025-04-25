@@ -1,13 +1,13 @@
 // ignore_for_file: depend_on_referenced_packages, unrelated_type_equality_checks
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:get/get.dart';
 import 'package:trend_browser/controllers/app_controller.dart';
 import 'package:trend_browser/helpers/read_write.dart';
 import 'package:trend_browser/views/tabs/download_page.dart';
 import 'package:trend_browser/views/tabs/tab_home.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:trend_browser/views/tabs/tabs_history.dart';
 import 'package:trend_browser/views/website_view.dart';
-import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
           if(_con.selected.value != 'view') {
             _con.selected("view");
           } else {
-            _con.webViewController!.loadUrl(urlRequest: URLRequest(url: Uri.parse(_con.urlCon.text)));
+            _con.webViewController!.loadUrl(urlRequest: URLRequest(url: WebUri(_con.urlCon.text)));
           }
         }
       ),

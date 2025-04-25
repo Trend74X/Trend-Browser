@@ -1,15 +1,16 @@
 // ignore_for_file: depend_on_referenced_packages
-import 'dart:io';
 import 'dart:developer';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:get/get.dart';
 import 'package:trend_browser/controllers/app_controller.dart';
 import 'package:trend_browser/helpers/read_write.dart';
 
 class WebsiteView extends StatefulWidget {
-  const WebsiteView({Key? key}) : super(key: key);
+  const WebsiteView({super.key});
 
   @override
   State<WebsiteView> createState() => _WebsiteViewState();
@@ -22,8 +23,7 @@ class _WebsiteViewState extends State<WebsiteView> {
   
   final AppController _con = Get.put(AppController());
 
-  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
-    crossPlatform: InAppWebViewOptions(
+  InAppWebViewSettings options = InAppWebViewSettings(
       useShouldOverrideUrlLoading: true,
       mediaPlaybackRequiresUserGesture: false,
       supportZoom: false,
@@ -31,24 +31,19 @@ class _WebsiteViewState extends State<WebsiteView> {
       javaScriptEnabled: true,
       useOnDownloadStart: true,
       userAgent: 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.181 Mobile Safari/537.36',
-    ),
-    android: AndroidInAppWebViewOptions(
       useHybridComposition: true,
       builtInZoomControls: false,
-      mixedContentMode: AndroidMixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+      mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
       useWideViewPort: false,
-      forceDark: AndroidForceDark.FORCE_DARK_AUTO,
-    ),
-    ios: IOSInAppWebViewOptions(
+      forceDark: ForceDark.AUTO,
       allowsInlineMediaPlayback: true,
-    )
   );
 
   @override
   void initState() {
     super.initState();
     _con.pullToRefreshController = PullToRefreshController(
-      options: PullToRefreshOptions(
+      settings: PullToRefreshSettings(
         color: Colors.red,
       ),
       onRefresh: () async {
@@ -66,12 +61,11 @@ class _WebsiteViewState extends State<WebsiteView> {
   @override
   Widget build(BuildContext context) {
     String initialUrl = read('storedUrl') == "" || read('storedUrl') == "about:blank" ? "https://www.google.com" : read('storedUrl');
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
         if (_con.webViewController != null) {
           _con.webViewController!.goBack();
         }
-        return false;
       },
       child: Scaffold(
         body: SafeArea(
@@ -84,8 +78,8 @@ class _WebsiteViewState extends State<WebsiteView> {
                     children: [
                       InAppWebView(
                         key: webViewKey,
-                        initialUrlRequest: URLRequest(url: Uri.parse(initialUrl)),
-                        initialOptions: options,
+                        initialUrlRequest: URLRequest(url: WebUri(initialUrl)),
+                        initialSettings: options,
                         pullToRefreshController: _con.pullToRefreshController,
                         onWebViewCreated: (controller) {
                           _con.webViewController = controller;
@@ -101,25 +95,17 @@ class _WebsiteViewState extends State<WebsiteView> {
                           var name = await controller.getTitle();
                           _con.createHistory(icon[0].url.toString(), name, uri);
                         },
-                        androidOnPermissionRequest: (controller, origin, resources) async {
-                          return PermissionRequestResponse(
-                            resources: resources,
-                            action: PermissionRequestResponseAction.GRANT
-                          );
-                        },
+                        // onPermissionRequest: (controller, origin, resources) async {
+                        //   return PermissionRequestResponse(
+                        //     resources: resources,
+                        //     action: PermissionRequestResponseAction.GRANT
+                        //   );
+                        // },
                         shouldOverrideUrlLoading: (controller, navigationAction) async {
-                          // var uri = navigationAction.request.url!.toString();
-                          // if (![ "http", "https", "file", "chrome",
-                          //   "data", "javascript", "about"].contains(uri.scheme)) {
-                          //   if (await canLaunchUrl(Uri.parse(url))) {
-                          //     // Launch the App
-                          //     await launchUrl(
-                          //       Uri.parse(url),
-                          //     );
-                          //     // and cancel the request
-                          //     return NavigationActionPolicy.CANCEL;
-                          //   }
-                          // }
+                          var uri = navigationAction.request.url!;
+                          if (!["http", "https", "file", "chrome", "data", "javascript", "about"].contains(uri.scheme)) {
+                            return NavigationActionPolicy.CANCEL;
+                          }
                           return NavigationActionPolicy.ALLOW;
                         },
                         onLoadStop: (controller, url) async {
@@ -130,7 +116,7 @@ class _WebsiteViewState extends State<WebsiteView> {
                             write('storedUrl', url.toString());
                           });
                         },
-                        onLoadError: (controller, url, code, message) {
+                        onReceivedError:(controller, request, error) {
                           _con.pullToRefreshController!.endRefreshing();
                         },
                         onProgressChanged: (controller, progress) {

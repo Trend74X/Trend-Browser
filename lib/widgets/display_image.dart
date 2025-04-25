@@ -1,18 +1,18 @@
 // ignore_for_file: depend_on_referenced_packages
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DisplayNetworkImage extends StatefulWidget {
   const DisplayNetworkImage({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.height, 
     required this.width,
     this.forPage, 
     this.isFromViewImage,
-  }): super(key: key);
+  });
       
   final String imageUrl;
   final double? height;
@@ -59,12 +59,12 @@ class _DisplayNetworkImageState extends State<DisplayNetworkImage> {
 
 class CustomShimmer extends StatelessWidget {
   const CustomShimmer({
-    Key? key,
+    super.key,
     this.height = 30.0,
     this.width = 200.0,
     this.isCircular = false,
     this.radius,
-  }) : super(key: key);
+  });
   final double? height;
   final double? width;
   final bool? isCircular;

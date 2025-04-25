@@ -1,12 +1,13 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'dart:async';
-import 'package:get/get.dart';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:trend_browser/controllers/app_controller.dart';
 import 'package:trend_browser/views/homepage.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();

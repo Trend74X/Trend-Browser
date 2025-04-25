@@ -1,11 +1,11 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:trend_browser/controllers/app_controller.dart';
 import 'package:trend_browser/helpers/read_write.dart';
 import 'package:trend_browser/widgets/custom_button.dart';
 import 'package:trend_browser/widgets/custom_textfield.dart';
 import 'package:trend_browser/widgets/display_image.dart';
-import 'package:get/get.dart';
 
 class TabHome extends StatefulWidget {
   const TabHome({super.key});
@@ -29,8 +29,8 @@ class TabHomeState extends State<TabHome> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: GestureDetector(
         onTap: () => setState(() => removeBookmark = false ),
         child: Scaffold(

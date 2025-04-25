@@ -18,8 +18,8 @@ class _HistoryState extends State<History> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Container(
         padding: const EdgeInsets.only(bottom: 42.0),
         color: Colors.black87,
