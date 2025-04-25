@@ -30,9 +30,9 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           title: Obx(() => 
             _con.selected.value == 'history'
-              ? const Text('History')
+              ? const Text('History', style: TextStyle(color: Colors.white))
               : _con.selected.value == 'download'
-                ? const Text('Downloads')
+                ? const Text('Downloads', style: TextStyle(color: Colors.white))
                 : Row(
                   children: [
                     Expanded(
@@ -171,6 +171,7 @@ class _HomePageState extends State<HomePage> {
       icon: const Icon(
         Icons.download,
         size: 35.0,
+        color: Colors.white,
       )
     );
   }

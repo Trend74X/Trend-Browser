@@ -85,7 +85,7 @@ class _HistoryState extends State<History> {
         write('storedUrl', data.url);
       },
       child: SizedBox(
-        height: 52.0,
+        height: 58.0,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(

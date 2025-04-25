@@ -45,6 +45,7 @@ class TabHomeState extends State<TabHome> {
                 : GridView.count(
                   crossAxisCount: 3,
                   mainAxisSpacing: 16.0,
+                  childAspectRatio: 0.8,
                   children: List.generate(
                     _con.bookmarks.length + 1, 
                     (index) {
@@ -67,20 +68,23 @@ class TabHomeState extends State<TabHome> {
                                 children: [
                                   DisplayNetworkImage(
                                     imageUrl: data['img']!,
-                                    height: 90.0,
-                                    width: 100.0,
+                                    height: MediaQuery.of(context).size.width * 0.2,
+                                    width: MediaQuery.of(context).size.width * 0.2,
                                   ),
                                   showDeleteIcon(index)
                                 ],
                               ),
                               const SizedBox(height: 8.0),
-                              Text(
-                                data['name']!,
-                                style: const TextStyle(
-                                  fontSize: 16.0,
+                              Flexible(
+                                child: Text(
+                                  data['name']!,
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1
                               ),
                             ],
                           ),
@@ -89,13 +93,14 @@ class TabHomeState extends State<TabHome> {
                         return InkWell(
                           onTap: () => showAddBookmark(),
                           child: Column(
-                            children: const [
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
                               Icon(
                                 Icons.add,
-                                size: 90.0,
+                                size: MediaQuery.of(context).size.width * 0.2,
                               ),
-                              SizedBox(height: 8.0),
-                              Text(
+                              const SizedBox(height: 8.0),
+                              const Text(
                                 'Add New',
                                 style: TextStyle(
                                   fontSize: 16.0
